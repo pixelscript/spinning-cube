@@ -46,29 +46,43 @@ class SpinningCube(app.App):
         self.button_states = Buttons(self)
         self.cube = Cube(0.4)
         self.colors = [
-            (1, 1, 1),  # White
-            (0, 1, 0),  # Green
-            (1, 0, 0),  # Red
-            (0, 0, 1),  # Blue
-            (1, 1, 0),  # Yellow
-            (0, 1, 1),  # Cyan
-            (1, 0, 1),  # Magenta
-            (1, 0.5, 0),  # Orange
-            (0.5, 0, 0.5),  # Purple
-            (0.5, 0.5, 0.5)  # Gray
+            (1, 1, 1), (0, 1, 0), (1, 0, 0), (0, 0, 1),
+            (1, 1, 0), (0, 1, 1), (1, 0, 1), (1, 0.5, 0),
+            (0.5, 0, 0.5), (0.5, 0.5, 0.5)
         ]
         self.current_color_index = 0
+        self.angle_x, self.angle_y, self.angle_z = 0.03, 0.06, 0.08
 
     def update(self, delta):
         if self.button_states.get(BUTTON_TYPES["CANCEL"]):
             self.button_states.clear()
             self.minimise()
-
+        
         if self.button_states.get(BUTTON_TYPES["RIGHT"]):
             self.current_color_index = (self.current_color_index + 1) % len(self.colors)
             self.button_states.clear()
 
-        self.cube.rotate(0.03, 0.06, 0.08)
+        if self.button_states.get(BUTTON_TYPES["CONFIRM"]):
+            self.angle_y += 0.05
+            if self.angle_y >= 0.5:
+               self.angle_y = 0
+            self.button_states.clear()
+
+        if self.button_states.get(BUTTON_TYPES["LEFT"]):
+           self.angle_z += 0.05
+           if self.angle_z >= 0.5:
+               self.angle_z = 0
+           self.button_states.clear()
+        
+        if self.button_states.get(BUTTON_TYPES["UP"]):
+            self.angle_x += 0.05
+            self.button_states.clear()
+
+        if self.button_states.get(BUTTON_TYPES["DOWN"]):
+            self.angle_x -= 0.05
+            self.button_states.clear()
+
+        self.cube.rotate(self.angle_x, self.angle_y, self.angle_z)
 
     def draw(self, ctx):
         clear_background(ctx)
