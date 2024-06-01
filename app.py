@@ -3,7 +3,10 @@ import math
 from tildagonos import tildagonos
 from app_components import clear_background
 from events.input import Buttons, BUTTON_TYPES
-
+from system.eventbus import eventbus
+from system.patterndisplay.events import *
+from tildagonos import tildagonos
+import asyncio
 class Cube:
     def __init__(self, size):
         self.size = size
@@ -42,6 +45,8 @@ class Cube:
 
 class SpinningCube(app.App):
     def __init__(self):
+        eventbus.emit(PatternDisable())
+        self.currentLed = 0
         self.trail_length = 1
         self.button_states = Buttons(self)
         self.cube = Cube(0.4)
@@ -50,11 +55,41 @@ class SpinningCube(app.App):
             (1, 1, 0), (0, 1, 1), (1, 0, 1), (1, 0.5, 0),
             (0.5, 0, 0.5), (0.5, 0.5, 0.5)
         ]
+        self.colors_neo = [
+            (255, 255, 255),  # White
+            (0, 255, 0),      # Green
+            (255, 0, 0),      # Red
+            (0, 0, 255),      # Blue
+            (255, 255, 0),    # Yellow
+            (0, 255, 255),    # Cyan
+            (255, 0, 255),    # Magenta
+            (255, 128, 0),    # Orange
+            (128, 0, 128),    # Purple
+            (128, 128, 128)   # Gray
+        ]
         self.current_color_index = 0
         self.angle_x, self.angle_y, self.angle_z = 0.05, 0.05, 0.10
         self.trail = []
 
+    def _make_black(self):
+        asyncio.sleep(0.5)
+        for i in range(1, 13):
+            tildagonos.leds[i] = (0, 0, 0)
+        tildagonos.leds.write()
+    
+    def make_next_white(self):
+        for i in range(1, 13):
+            if self.currentLed == i:
+                tildagonos.leds[i] = (self.colors_neo[self.current_color_index])
+            else:
+                tildagonos.leds[i] = (0, 0, 0)
+        self.currentLed += 1
+        if self.currentLed > 12:
+            self.currentLed = 1
+        tildagonos.leds.write()
+        
     def update(self, delta):
+        self.make_next_white()
         if self.button_states.get(BUTTON_TYPES["CANCEL"]):
             self.button_states.clear()
             self.minimise()

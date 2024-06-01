@@ -14,7 +14,7 @@ category = "Badge"
 # OPTIONAL: If your app prefers wifi to be off or on when entering.
 # Useful if you want more resources (false) or need wifi (true).
 # Remove if you don't want to change wifi state!
-# wifi_preference = false
+wifi_preference = false
 
 [entry]
 # The name of your entry point `Application` class
@@ -37,4 +37,4 @@ description = "Literally just a spinning cube. Press buttons to change colours, 
 # increased, we interpret this as a new version being released.
 #
 # Version number must be an integer!
-version = "0.0.1"
+version = "0.0.3"
