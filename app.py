@@ -44,7 +44,7 @@ class Cube:
 class SpinningCube(app.App):
     def __init__(self):
         self.button_states = Buttons(self)
-        self.cube = Cube(0.3)
+        self.cube = Cube(0.4)
         self.colors = [
             (1, 1, 1),  # White
             (0, 1, 0),  # Green
@@ -68,7 +68,7 @@ class SpinningCube(app.App):
             self.current_color_index = (self.current_color_index + 1) % len(self.colors)
             self.button_states.clear()
 
-        self.cube.rotate(0.01, 0.02, 0.03)
+        self.cube.rotate(0.03, 0.06, 0.08)
 
     def draw(self, ctx):
         clear_background(ctx)
