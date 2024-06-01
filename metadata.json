@@ -1,0 +1,7 @@
+{
+    "callable": "SpinningCube",
+    "name": "Spinning Cube",
+    "category": "Badge",
+    "hidden": false,
+    "path": "apps.spinningcube.app"
+}
